@@ -14,10 +14,7 @@ final class SuccessLoginState extends LoginState {}
 final class ErrorLoginState extends LoginState {
   final String errorMessage;
 
-
   ErrorLoginState({
     required this.errorMessage,
   });
 }
-
-
