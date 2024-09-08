@@ -1,3 +1,6 @@
+import 'package:caed_app/business_logic/home/home_cubit.dart';
+import 'package:caed_app/data/repository/caed_repository.dart';
+import 'package:caed_app/presentation/home/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,45 +18,54 @@ class NavigationPage extends StatefulWidget {
 
 class _RootPageState extends State<NavigationPage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NavigationCubit(),
-      child: Scaffold(
-        bottomNavigationBar: const _BottomNaVigationBarWidget(),
-        body: BlocProvider(
+    ICaedRepository repository = context.read<ICaedRepository>();
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomeCubit(
+            repository: repository,
+          ),
+        ),
+        BlocProvider(
           create: (context) => NavigationCubit(),
-          child: SafeArea(child: _body()),
+        ),
+      ],
+      child: const Scaffold(
+        bottomNavigationBar: _BottomNaVigationBarWidget(),
+        body: SafeArea(
+          child: _NavigationBuilder(),
         ),
       ),
     );
   }
+}
 
-  Widget _body() => BlocBuilder<NavigationCubit, NavigationState>(
-        builder: (context, state) {
-          if (state.navBarItem == NavBarItem.home) {
-            return Container(
-              color: Colors.green,
-              child: const Text('gui'),
-            );
-          } else if (state.navBarItem == NavBarItem.options) {
-            return Container(
-              color: Colors.blue,
-              child: const Text('text'),
-            );
-          } else if (state.navBarItem == NavBarItem.tutorial) {
-            return Container(
-              color: Colors.red,
-              child: const Text('text'),
-            );
-          }
-          return const SizedBox();
-        },
-      );
+class _NavigationBuilder extends StatelessWidget {
+  const _NavigationBuilder();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<NavigationCubit, NavigationState>(
+      builder: (context, state) {
+        if (state.navBarItem == NavBarItem.home) {
+          return const HomePage();
+        } else if (state.navBarItem == NavBarItem.options) {
+          return Container(
+            color: Colors.green,
+            child: const Text('opa'),
+          );
+        } else if (state.navBarItem == NavBarItem.tutorial) {
+          return Container(
+            color: Colors.red,
+            child: const Text('text'),
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
 }
 
 class _BottomNaVigationBarWidget extends StatelessWidget {
