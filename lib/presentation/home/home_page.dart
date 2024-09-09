@@ -1,10 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:caed_app/business_logic/home/home_export.dart';
-import 'package:caed_app/data/models/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'widgets/info_row.dart';
 import 'widgets/success_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,4 +55,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
