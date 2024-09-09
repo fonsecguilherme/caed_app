@@ -8,6 +8,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.cyan,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
         create: (context) => LoginCubit(),
