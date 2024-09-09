@@ -1,6 +1,7 @@
 import 'package:caed_app/business_logic/home/home_export.dart';
 import 'package:caed_app/presentation/package_detail/package_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/data_model.dart';
 import 'info_row.dart';
@@ -46,6 +47,7 @@ class _TopView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 319,
+      // TODO: Utilizar listview.count e componentizar o container com as informações
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -140,10 +142,10 @@ class _BottomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Flexible(
-        flex: 4,
+    return Flexible(
+      flex: 4,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: DefaultTabController(
           length: 3,
           child: Column(
@@ -159,9 +161,9 @@ class _BottomView extends StatelessWidget {
                 height: 255,
                 child: TabBarView(
                   children: [
-                    _PackagesListing(data.packages),
-                    const Icon(Icons.directions_transit),
-                    const Icon(Icons.directions_bike),
+                    _PackagesTab(data.packages),
+                    const _StatusTab(),
+                    const Center(child: Text('Sem dados disponíveis.')),
                   ],
                 ),
               ),
@@ -173,11 +175,54 @@ class _BottomView extends StatelessWidget {
   }
 }
 
-class _PackagesListing extends StatelessWidget {
-  const _PackagesListing(this.packages);
+class _StatusTab extends StatelessWidget {
+  const _StatusTab();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<HomeCubit>(context);
+
+    return GridView.builder(
+      itemCount: Condition.values.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+      ),
+      itemBuilder: (context, index) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: cubit.colorPicker(
+                  Condition.values.elementAt(index),
+                ),
+              ),
+              height: 15,
+              width: 15,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              Condition.values.elementAt(index).name,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PackagesTab extends StatefulWidget {
+  const _PackagesTab(this.packages);
 
   final List<Package> packages;
 
+  @override
+  State<_PackagesTab> createState() => _PackagesTabState();
+}
+
+class _PackagesTabState extends State<_PackagesTab> {
+  HomeCubit get cubit => context.read<HomeCubit>();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -200,20 +245,23 @@ class _PackagesListing extends StatelessWidget {
             ),
           ),
           const Divider(),
-          packages.isNotEmpty
+          widget.packages.isNotEmpty
               ? ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    final package = packages.elementAt(index);
+                    final package = widget.packages.elementAt(index);
 
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PackageDetailPage(
-                              package: package,
+                            builder: (context) => BlocProvider.value(
+                              value: cubit,
+                              child: PackageDetailPage(
+                                package: package,
+                              ),
                             ),
                           ),
                         );
@@ -228,7 +276,7 @@ class _PackagesListing extends StatelessWidget {
                     height: 10,
                     color: Colors.grey,
                   ),
-                  itemCount: packages.length,
+                  itemCount: widget.packages.length,
                 )
               : const Expanded(
                   child: Center(
