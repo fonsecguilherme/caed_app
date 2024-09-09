@@ -15,7 +15,7 @@ class CaedRepository extends ICaedRepository {
 
   @override
   Future<Data?> fetchData() async {
-    const url = 'https://mocki.io/v1/9cd67f8c-c13f-45f1-8f91-06fd1dbbdc1a';
+    const url = 'https://mocki.io/v1/66acb7fa-5328-4d6e-9776-a8788f963e9c';
     try {
       final response = await client.get(url: url);
 
