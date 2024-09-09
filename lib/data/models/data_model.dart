@@ -68,11 +68,13 @@ class Package {
 class Status {
   final String hour;
   final String date;
+  final Condition condition;
   final String message;
 
   Status({
     required this.hour,
     required this.date,
+    required this.condition,
     required this.message,
   });
 
@@ -83,12 +85,36 @@ class Status {
   factory Status.fromMap(Map<String, dynamic> json) => Status(
         hour: json["hour"],
         date: json["date"],
+        condition: condidionValues.map[json["condition"]] ?? Condition.none,
         message: json["message"],
       );
 
   Map<String, dynamic> toMap() => {
         "hour": hour,
         "date": date,
+        "condition": condition,
         "message": message,
       };
+}
+
+enum Condition { received, returned, delivered, misplaced, retained, none }
+
+final condidionValues = EnumValues({
+  "received": Condition.received,
+  "returned": Condition.returned,
+  "delivered": Condition.delivered,
+  "misplaced": Condition.misplaced,
+  "retained": Condition.retained,
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
