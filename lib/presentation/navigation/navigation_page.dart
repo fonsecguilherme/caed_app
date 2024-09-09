@@ -52,14 +52,12 @@ class _NavigationBuilder extends StatelessWidget {
         if (state.navBarItem == NavBarItem.home) {
           return const HomePage();
         } else if (state.navBarItem == NavBarItem.options) {
-          return Container(
-            color: Colors.green,
-            child: const Text('opa'),
+          return const Center(
+            child: Text('Tela de opções.'),
           );
         } else if (state.navBarItem == NavBarItem.tutorial) {
-          return Container(
-            color: Colors.red,
-            child: const Text('text'),
+          return const Center(
+            child: Text('Tela de tutoriais.'),
           );
         }
         return const SizedBox();
