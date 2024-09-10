@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/http_client.dart';
 import '../../data/repository/caed_repository.dart';
 import '../../utils/messages.dart';
-import 'custom_input_widget.dart';
+import 'widgets/custom_input_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
