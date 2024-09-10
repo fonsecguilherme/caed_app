@@ -85,30 +85,31 @@ class Status {
   factory Status.fromMap(Map<String, dynamic> json) => Status(
         hour: json["hour"],
         date: json["date"],
-        condition: condidionValues.map[json["condition"]] ?? Condition.none,
+        condition: conditionValues.map[json["condition"]] ?? Condition.none,
         message: json["message"],
       );
 
   Map<String, dynamic> toMap() => {
         "hour": hour,
         "date": date,
-        "condition": condition,
+        "condition": conditionValues.reverse[condition],
         "message": message,
       };
 }
 
 enum Condition { received, returned, delivered, misplaced, retained, none }
 
-final condidionValues = EnumValues({
+final conditionValues = EnumValues({
   "received": Condition.received,
   "returned": Condition.returned,
   "delivered": Condition.delivered,
   "misplaced": Condition.misplaced,
   "retained": Condition.retained,
+  "none": Condition.none,
 });
 
 class EnumValues<T> {
-  Map<String, T> map;
+  final Map<String, T> map;
   late Map<T, String> reverseMap;
 
   EnumValues(this.map);
@@ -118,3 +119,21 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+
+
+/*
+
+  // Converta _datamock para JSON string
+    final data = _datamock.toJson();
+    
+    // Converta a string JSON para um mapa
+    final actualJson = jsonDecode(data) as Map<String, dynamic>;
+
+    // Converta o _jsonDataMock para JSON string e depois para um mapa
+    final expectedJson = _jsonDataMock as Map<String, dynamic>;
+
+    // Compare os mapas diretamente
+    expect(actualJson, equals(expectedJson));
+
+
+*/
