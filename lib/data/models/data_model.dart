@@ -85,31 +85,30 @@ class Status {
   factory Status.fromMap(Map<String, dynamic> json) => Status(
         hour: json["hour"],
         date: json["date"],
-        condition: conditionValues.map[json["condition"]] ?? Condition.none,
+        condition: condidionValues.map[json["condition"]] ?? Condition.none,
         message: json["message"],
       );
 
   Map<String, dynamic> toMap() => {
         "hour": hour,
         "date": date,
-        "condition": conditionValues.reverse[condition],
+        "condition": condition,
         "message": message,
       };
 }
 
 enum Condition { received, returned, delivered, misplaced, retained, none }
 
-final conditionValues = EnumValues({
+final condidionValues = EnumValues({
   "received": Condition.received,
   "returned": Condition.returned,
   "delivered": Condition.delivered,
   "misplaced": Condition.misplaced,
   "retained": Condition.retained,
-  "none": Condition.none,
 });
 
 class EnumValues<T> {
-  final Map<String, T> map;
+  Map<String, T> map;
   late Map<T, String> reverseMap;
 
   EnumValues(this.map);
