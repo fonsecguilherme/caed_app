@@ -1,10 +1,57 @@
+import 'package:caed_app/business_logic/home/home_export.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+import 'widgets/success_widget.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeCubit get cubit => context.read<HomeCubit>();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final currentState = cubit.state;
+    if (currentState is InitialHomeState) {
+      cubit.fetchData();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Listagem de Pacotes'),
+      ),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          switch (state) {
+            case LoadingHomeState():
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case SuccessHomeState():
+              return SuccessWidget(
+                cubit: cubit,
+                data: state.result,
+              );
+
+            case ErrorHomeState():
+              return Center(
+                child: Text(state.errorMessage),
+              );
+            default:
+              return const Text('default');
+          }
+        },
+      ),
+    );
   }
 }

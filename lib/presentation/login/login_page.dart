@@ -1,10 +1,12 @@
-import 'package:caed_app/business_logic/cubit/login_export.dart';
-import 'package:caed_app/presentation/home/home_page.dart';
+import 'package:caed_app/business_logic/login/login_export.dart';
+import 'package:caed_app/presentation/navigation/navigation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/http_client.dart';
+import '../../data/repository/caed_repository.dart';
 import '../../utils/messages.dart';
-import 'custom_input_widget.dart';
+import 'widgets/custom_input_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +17,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   LoginCubit get loginCubit => context.read<LoginCubit>();
-  // IGabrielRepository get repository => context.read<IGabrielRepository>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,12 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const HomePage(),
+                builder: (context) => RepositoryProvider<ICaedRepository>(
+                  create: (context) => CaedRepository(
+                    client: HttpClient(),
+                  ),
+                  child: const NavigationPage(),
+                ),
               ),
             );
           }
