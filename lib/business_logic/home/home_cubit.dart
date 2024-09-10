@@ -72,4 +72,15 @@ class HomeCubit extends Cubit<HomeState> {
         return Colors.black;
     }
   }
+
+  String translateStatus(Condition condition) {
+    return switch (condition) {
+      Condition.received => 'Recebido',
+      Condition.returned => 'Retornado',
+      Condition.delivered => 'Entregue',
+      Condition.misplaced => 'Extraviado',
+      Condition.retained => 'Retido',
+      Condition.none => 'Sem Status',
+    };
+  }
 }
