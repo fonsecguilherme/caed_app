@@ -6,11 +6,13 @@ class InfoRow extends StatelessWidget {
     required this.packageAmout,
     required this.color,
     required this.percentage,
+    required this.title,
   });
 
   final int packageAmout;
   final Color color;
   final int percentage;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,9 +32,9 @@ class InfoRow extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Text('Recebidos'),
+                    Text(title),
                   ],
                 ),
                 Text('$packageAmout pacotes'),
@@ -40,7 +42,14 @@ class InfoRow extends StatelessWidget {
             ),
           ],
         ),
-        Text('$percentage%')
+        Text(
+          '$percentage%',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff828282),
+          ),
+        )
       ],
     );
   }
