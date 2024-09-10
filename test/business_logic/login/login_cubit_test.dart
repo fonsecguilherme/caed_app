@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:caed_app/business_logic/login/login_export.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
   group('Login success', () {
     blocTest<LoginCubit, LoginState>(
